@@ -11,7 +11,26 @@ client_list = []
 
 #Define c_move handler
 def cmove_handler (message):
+    #divide message
+    temp = message[6]
+    i = 6
+    while temp != ",":
+        cmove_id = cmove_id + temp
+        i++
+    i++
+    temp = message[i]
+    while temp != ",":
+        cmove_x = cmove_x + temp
+        i++
+    i++
+    temp = message[i]
+    while temp = != ")":
+        cmove_y = cmove_y + temp
+        i++
+
     #save client list
+    client_data = [cmove_id, cmove_x, cmove_y]
+    client_list = 
     #Broadcasting - s_put, s_move, s_del - list division
 
 
@@ -28,5 +47,4 @@ while True:
     #Receive c_move
     if msg[0:4] = "cmove":
         print "Receive", msg
-        #save data and broadcasting
-        cmove_handler(msg)
+        cmove_handler(mgs)
