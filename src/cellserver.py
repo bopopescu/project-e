@@ -28,6 +28,8 @@ def cmove_handler (message):
         cmove_y = cmove_y + temp
         i++
 
+    #check whete client in list or not
+
     #save client list
     client_data = [cmove_id, cmove_x, cmove_y]
     client_list = array.append(client_data)
