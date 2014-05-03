@@ -2,44 +2,49 @@
 
 import sys
 import pika
+import zmq
 
-#Connect to RabbitMQ
-connection_send = pika.BlockinConnection(pika.ConnectionParameters(host='locahost'))
-channel_send = connection_send.channel()
+context = zmq.Conext()
+socket_cell = context.socket(zmq.REP)
 
-connection_receive = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
-channel_receive = connection.channel()
+client_list = []
 
-channel_send.queue_declare(queue='send')
-channel_receive.queue_declare(queue='receive')
+#Define c_move handler
+def cmove_handler (message):
+    #divide message
+    temp = message[6]
+    i = 6
+    while temp != ",":
+        cmove_id = cmove_id + temp
+        i++
+    i++
+    temp = message[i]
+    while temp != ",":
+        cmove_x = cmove_x + temp
+        i++
+    i++
+    temp = message[i]
+    while temp = != ")":
+        cmove_y = cmove_y + temp
+        i++
 
-channel_send.basic_publish(exchange='', routing_key='send', body='Hello')
-print " px[ Sent 'Hello World!'"
-
-print "receive"
-
-def callback(ch, method, properties, body):
-    print "receive %r" % (body,)
-
-channel_receive.basic_consume(callback, queue='receive', no_ack=True)
-
-channel_receive.start_consuming()
+    #save client list
+    client_data = [cmove_id, cmove_x, cmove_y]
+    client_list = 
+    #Broadcasting - s_put, s_move, s_del - list division
 
 
-
-
-
-
-
-connection_send.close()
-
+#temporary tcp location
+socket_cell.bind("tcp://127.0.0.1:5000")
 
 ##########Init##########
-# MQ connection, creation of world
-########################
+#Connect to RabbitMQ
 
 
 ##########Loop##########
-# Receive c_move and correct data according to c_move
-# Broadcasting - s_put, s_move, s_del - list division
-########################
+while True:
+    msg = socket_cell.recv()
+    #Receive c_move
+    if msg[0:4] = "cmove":
+        print "Receive", msg
+        cmove_handler(mgs)
