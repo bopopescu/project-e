@@ -13,7 +13,25 @@ channel_receive = connection.channel()
 channel_send.queue_declare(queue='send')
 channel_receive.queue_declare(queue='receive')
 
+channel_send.basic_publish(exchange='', routing_key='send', body='Hello')
+print " px[ Sent 'Hello World!'"
 
+print "receive"
+
+def callback(ch, method, properties, body):
+    print "receive %r" % (body,)
+
+channel_receive.basic_consume(callback, queue='receive', no_ack=True)
+
+channel_receive.start_consuming()
+
+
+
+
+
+
+
+connection_send.close()
 
 
 ##########Init##########
