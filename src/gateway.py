@@ -25,10 +25,8 @@ while True:
 #when cliens's msg starts with 'cmove', send it to rabbitmq(or cell server?)
 	elif (str.startswith('cmove'))
 	socket_cell.send(msg)
-}	
-#loop2 : receive messages from MQ -> sen to clients
-while True:
-{
+
+#receive messages from MQ -> sen to clients
 	msg_cell=socket_cell.recv()
 #Maybe we need to filter msg_cell. But how?...
 	socket_client.send(msg_cell)
