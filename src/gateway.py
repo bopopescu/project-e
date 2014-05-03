@@ -8,6 +8,9 @@ context=zmq.Context();
 connect_cnt=0;
 socket_client=context.socket(zmq.REP);
 socket_cell=context.socket(zmq.REQ);
+#temporary tcp location
+socket_client.bind("tcp://127.0.0.1:5000");
+socket_cell.connect("tcp://127.0.0.1:2492");
 
 #connection to zookeeper
 zk=KazooClient(hosts='127.0.0.1:2181');
@@ -26,14 +29,6 @@ def my_listener(state):
 	}#Handle being connected/reconnected to Zookeeper
 }
 zk.add_listener(my_listener);
-
-
-
-
-
-#temporary tcp location
-socket_client.bind("tcp://127.0.0.1:5000");
-socket_cell.connect("tcp://127.0.0.1:2492");
 
 #loop1 : Connection Accept, receive messages from clients -> send to MQ
 #while True...?True...? I don't know. @_@
