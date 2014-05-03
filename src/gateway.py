@@ -16,10 +16,13 @@ socket_cell.connect("tcp://127.0.0.1:2492");
 while True:
 {
 	msg=socket_client.recv()
+#when client is connected to socket, send msg "connected"
 	if (msg="connected"):#connect count++
 	connect_cnt++
+#when client cut connection, send msg "cut"
 	elif (msg="cut"):#connect count--
 	connect_cnt--
+#when cliens's msg starts with 'cmove', send it to rabbitmq(or cell server?)
 	elif (str.startswith('cmove'))
 	socket_cell.send(msg)
 }	
