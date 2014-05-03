@@ -7,6 +7,7 @@ import zmq
 context = zmq.Conext()
 socket_cell = context.socket(zmq.REP)
 
+#we will use hashtable later
 client_list = array.array()
 
 #Define c_move handler
