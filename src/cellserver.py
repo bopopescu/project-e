@@ -18,6 +18,7 @@ import time
 #print 'Connection address:', addr
 ######
 
+#Echo server example
 context = zmq.Context()
 socket = context.socket(zmq.REP)
 socket.bind("tcp://*:5555")
@@ -32,6 +33,19 @@ while True:
 
     # Send reply back to client
     socket.send("world")
+
+#Publish server example
+context = zmq.Context()
+socket = context.socket(zmq.PUB)
+socket.bind("tcp://*:5556")
+
+while True:
+    zipcode = 1
+    temperature = 1
+    relhumidity = 1
+
+    socket.send_string("%i %i %i" % (zipcode, temperature, relhumidity))
+
 
 ##########Init##########
 # MQ connection, creation of world
