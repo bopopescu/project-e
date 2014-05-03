@@ -2,38 +2,18 @@
 
 import sys
 import pika
-import zmq
-import time
 
-#make server by using zmq.REP and zmp.REQ
+#Connect to RabbitMQ
+connection_send = pika.BlockinConnection(pika.ConnectionParameters(host='locahost'))
+channel_send = connection_send.channel()
 
-#Echo server example
-context = zmq.Context()
-socket = context.socket(zmq.REP)
-socket.bind("tcp://*:5555")
+connection_receive = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+channel_receive = connection.channel()
 
-while True:
-    # Wait for next request from client
-    message = socket.recv()
-    print("Received request: %s" % message)
+channel_send.queue_declare(queue='send')
+channel_receive.queue_declare(queue='receive')
 
-    # Do some 'work'
-    time.sleep(1)
 
-    # Send reply back to client
-    socket.send("world")
-
-#Publish server example
-context = zmq.Context()
-socket = context.socket(zmq.PUB)
-socket.bind("tcp://*:5556")
-
-while True:
-    zipcode = 1
-    temperature = 1
-    relhumidity = 1
-
-    socket.send_string("%i %i %i" % (zipcode, temperature, relhumidity))
 
 
 ##########Init##########
