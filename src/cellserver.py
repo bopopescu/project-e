@@ -2,26 +2,31 @@
 import socket
 import sys
 import pika
+import zmq
 
-##########Init : MQ connection, creation of world(Oh...)#############3
+TCP_IP = '127.0.0.1'
+TCP_PORT = 8000
+BUFFER_SIZE = 1024
 
-# Create a TCP/IP socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # request socket from the kernel
+s.bind((TCP_IP, TCP_PORT)) # set socket address
+s.listen(1) # socket is waiting for connection
 
-# Bind the socket to the port
-server_address = ('localhost', 8000)
-print
+conn, addr = s.accept() # approve connection
+print 'Connection address:', addr
+
+##########Init##########
+# MQ connection, creation of world
+########################
 
 
-#loop : receive c-move and correct data according to c-move
-#       broad casting - s_put, s_move, s_del - list division
+##########Loop##########
+# Receive c_move and correct data according to c_move
+# Broadcasting - s_put, s_move, s_del - list division
+########################
+while 1:
+    data = conn.recv(BUFFER_SIZE)
+    if not data: break
+    conn.send(data) # echo
+conn.close()
 
-
-PORT = 8000
-
-Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
-
-httpd = SocketServer.TCPServer(("", PORT), Handler)
-
-print "serving at port", PORT
-httpd.serve_forever()
