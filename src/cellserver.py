@@ -34,11 +34,13 @@ def my_listener(state):
 zk.add_listener(my_listener)
 
 #connection to RabbitMQ
-connection_send = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+parameters_send = pika.URLParameters('ToBeDetermined')
+connection_send = pika.BlockingConnection(pika.ConnectionParameters(parameters_send))
 channel_send = connection_send.channel()
 channel_send.queue_declare(queue = 'send_to_MQ')
 
-connection_receive = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+parameters_receive = pika.URLParameters('ToBeDetermined')
+connection_receive = pika.BlockingConnection(pika.ConnectionParameters(parameters_receive))
 channel_receive = connection_receive.channel()
 channel_receive.queue_declare(queue = 'receive_from_MQ')
 
