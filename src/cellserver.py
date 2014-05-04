@@ -34,7 +34,9 @@ def my_listener(state):
 zk.add_listener(my_listener)
 
 #connection to RabbitMQ
-
+connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+channel = connection.channel()
+channel.queue_declare(queue='hello')
 
 #Define c_move handler
 #save client list. reply message(change to broadcasting later).
