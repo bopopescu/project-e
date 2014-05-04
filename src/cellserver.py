@@ -34,9 +34,13 @@ def my_listener(state):
 zk.add_listener(my_listener)
 
 #connection to RabbitMQ
-connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-channel = connection.channel()
-channel.queue_declare(queue='hello')
+connection_send = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+channel_send = connection_send.channel()
+channel_send.queue_declare(queue = 'send_to_MQ')
+
+connection_receive = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+channel_receive = connection_receive.channel()
+channel_receive.queue_declare(queue = 'receive_from_MQ')
 
 #Define c_move handler
 #save client list. reply message(change to broadcasting later).
@@ -68,9 +72,23 @@ def cmove_handler (message):
     s_move = 'smove(' + cmove_id + ',' + comve_x + ',' + cmove_y + ')'
     s_del = 'sdel(' + cmove_id + ',' + cmove_x + ',' + cmove_y + ')'
 
+    #RabbitMQ and ZMQ which one should I use???
+    #Send message to RabbitMQ
+    channel_send.basic_publish(exchange = '', routing_key = 'MQ', body = s_put)
+    channel_send.basic_publish(exchange = '', routing_key = 'MQ', body = s_move)
+    channel_send.basic_publish(exchange = '', routing_key = 'MQ', body = s_del)
+
+    #Send message by using ZMQ
     socket_cell.send(s_put)
     socket_cell.send(s_move)
     socket_cell.send(s_del)
+
+def callback(ch, method, properties, body):
+    print " [x] Received %r" % (body,)
+
+#Receive messages from RabbitMQ
+channel_receive.basic_consume(callback, queue = 'receive_from_MQ', no_ack = True)
+channel_receive.start_consuming()
 
 #Loop : Receive c_move, run cmove_handler
 while True:
@@ -79,3 +97,6 @@ while True:
     if msg[0:4] = "cmove":
         print "Receive", msg
         cmove_handler(mgs)
+
+#close the RabbitMQ connection
+connection_send.close()
