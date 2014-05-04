@@ -3,14 +3,41 @@
 import sys
 import pika
 import zmq
+from kazoo.client import KazooClient
+from kazoo.client import KazooState
 
+#Init : ZMQ connection, RabbitMQ connection, ZK Connection
+#ZMQ connection
 context = zmq.Conext()
 socket_cell = context.socket(zmq.REP)
-
-#we will use hashtable later
+#temporary tcp location
+socket_cell.bint("tcp://127.0.0.1:2492")
+#temporary client arry. we will use hashtable later
 client_list = array.array()
 
+#connection to zookeeper
+connect_cnt = 0
+zk = KazooClient(hosts='127.0.0.1:2181')
+zk.start()
+def my_listener(state):
+    #register somewhere that the session was lost
+    if state == KazooState.LOST:
+        zk.delete("cellservers/node", recursive = True)
+    #Handle being disconnected from Zookeeper
+    elif state == KazzoState.SUSPENDED:
+        zk.delete("/cellservers/node", recursive = True)
+    #Handle being connected/reconnected to Zookeeper
+    else:
+        zk.ensure_path("/cellservers")
+        zk.create("/cellservers/node", connect_cnt)
+
+zk.add_listener(my_listener)
+
+#connection to RabbitMQ
+
+
 #Define c_move handler
+#save client list. reply message(change to broadcasting later).
 def cmove_handler (message):
     #divide message
     temp = message[6]
@@ -43,14 +70,7 @@ def cmove_handler (message):
     socket_cell.send(s_move)
     socket_cell.send(s_del)
 
-#temporary tcp location
-socket_cell.bind("tcp://127.0.0.1:5000")
-
-##########Init##########
-#Connect to RabbitMQ
-
-
-##########Loop##########
+#Loop : Receive c_move, run cmove_handler
 while True:
     msg = socket_cell.recv()
     #Receive c_move
