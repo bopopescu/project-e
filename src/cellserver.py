@@ -88,6 +88,21 @@ def cmove_handler (message):
 def callback(ch, method, properties, body):
     print " [x] Received %r" % (body,)
 
+def get_CPU():
+    return cpu
+
+def get_Mem():
+    return mem
+
+def get_IO():
+    return IO
+
+def scale_in():
+    #scale in
+
+def scale_out():
+    #scale out
+
 #Receive messages from RabbitMQ
 channel_receive.basic_consume(callback, queue = 'receive_from_MQ', no_ack = True)
 channel_receive.start_consuming()
@@ -98,7 +113,13 @@ while True:
     #Receive c_move
     if msg[0:4] = "cmove":
         print "Receive", msg
-        cmove_handler(mgs)
+        cmove_handler(msg)
+
+    #scale in/out
+    if (get_CPU() > 1000 or get_Mem() > 1000 or get_IO() > 1000):
+        scale_out()
+    elif (get_CPU() < 100 and get_Mem() < 100 and get_IO() < 100):
+        scale_in()
 
 #close the RabbitMQ connection
 connection_send.close()
