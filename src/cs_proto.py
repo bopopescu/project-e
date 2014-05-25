@@ -7,7 +7,7 @@ import pika
 client_list = array.array()
 
 # methods
-
+클라이언트 리스트
 # generate messages and publish.
 def cmove_handler (message):
     #data members
