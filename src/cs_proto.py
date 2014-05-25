@@ -58,7 +58,8 @@ def cmove_handler (message):
         return
 
     #Generate s_put, s_move, s_del
-    #
+    #P, M, D가 시야 범위 내의 클라이언트 리스트들을 가지고 있도록 메시지를 만들어준다.
+    #지금은 예시로 메시지를 생성해준 것이다.
     s_put = 'sput(' + cmove_id + ',' + cmove_x + ',' + cmove_y + ',' + cmove_gw + ')'
     s_move = 'smove(' + cmove_id + ',' + cmove_x + ',' + cmove_y + ',' + cmove_gw + ')'
     s_del = 'sdel(' + cmove_id + ',' + cmove_x + ',' + cmove_y + ',' + cmove_gw + ')'
