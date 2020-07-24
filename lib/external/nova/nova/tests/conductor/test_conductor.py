@@ -893,21 +893,21 @@ class ConductorTestCase(_BaseTestCase, test.TestCase):
         self.mox.StubOutWithMock(db, 'instance_get_all_by_filters')
         db.instance_get_all_by_filters(self.context, filters,
                                        'fake-key', 'fake-sort',
-                                       columns_to_join=None, use_slave=False)
+                                       columns_to_join=None, use_subordinate=False)
         self.mox.ReplayAll()
         self.conductor.instance_get_all_by_filters(self.context, filters,
                                                    'fake-key', 'fake-sort')
 
-    def test_instance_get_all_by_filters_use_slave(self):
+    def test_instance_get_all_by_filters_use_subordinate(self):
         filters = {'foo': 'bar'}
         self.mox.StubOutWithMock(db, 'instance_get_all_by_filters')
         db.instance_get_all_by_filters(self.context, filters,
                                        'fake-key', 'fake-sort',
-                                       columns_to_join=None, use_slave=True)
+                                       columns_to_join=None, use_subordinate=True)
         self.mox.ReplayAll()
         self.conductor.instance_get_all_by_filters(self.context, filters,
                                                    'fake-key', 'fake-sort',
-                                                   use_slave=True)
+                                                   use_subordinate=True)
 
     def test_instance_get_active_by_window_joined(self):
         self.mox.StubOutWithMock(db, 'instance_get_active_by_window_joined')

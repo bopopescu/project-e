@@ -14,7 +14,7 @@ intersphinx_mapping = {'python': ('http://docs.python.org/2/objects.inv',
 templates_path = ['_templates']
 
 source_suffix = '.rst'
-master_doc = 'index'
+main_doc = 'index'
 
 project = 'pika'
 copyright = '2010-2013, Tony Garnock-Jones, Gavin M. Roy, VMWare and others.'
